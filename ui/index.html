@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velmora help assistant</title>
+<style>
+  body {
+    margin: 0;
+    background: #f5f5f2;
+    color: #1f2328;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  h2 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #57606a; margin: 0 0 10px; }
+
+  form { display: flex; gap: 8px; }
+  input {
+    flex: 1; min-width: 0; padding: 10px 12px; font-size: 1rem;
+    border: 1px solid #c9ccd1; border-radius: 6px; background: #fff;
+  }
+  button {
+    padding: 10px 18px; font-size: 1rem; border: 0; border-radius: 6px;
+    background: #2f5d50; color: #fff; cursor: pointer;
+  }
+  button:disabled { opacity: 0.6; cursor: wait; }
+
+  .examples { margin: 10px 0 28px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .examples button {
+    padding: 4px 10px; font-size: 0.85rem; background: #fff; color: #2f5d50;
+    border: 1px solid #c9ccd1;
+  }
+
+  .card { background: #fff; border: 1px solid #dcdfe3; border-radius: 8px; padding: 18px; margin-bottom: 16px; }
+  .badge { display: inline-block; font-size: 0.8rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; margin-bottom: 10px; }
+  .badge.ok { background: #dff3e4; color: #1a7f37; }
+  .badge.no { background: #fbefd5; color: #8a5a00; }
+  .badge.warn { background: #fde2e1; color: #a40e26; margin-left: 6px; }
+  .answer { white-space: pre-wrap; font-size: 1.05rem; margin: 0 0 12px; }
+  .cited { margin: 0 0 8px; }
+  .cited code { background: #eef1f4; padding: 1px 6px; border-radius: 4px; margin-right: 4px; }
+  .reason { color: #57606a; font-size: 0.9rem; margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eceef1; vertical-align: middle; }
+  th { color: #57606a; font-weight: 600; }
+  tr.is-cited td { background: #f1f8f3; }
+  .bar { height: 6px; background: #2f5d50; border-radius: 3px; }
+  .bar-wrap { width: 90px; background: #eceef1; border-radius: 3px; }
+  .num { font-variant-numeric: tabular-nums; }
+  .note { color: #57606a; font-size: 0.85rem; margin-top: 10px; }
+  .error { color: #a40e26; }
+
+  @media (max-width: 560px) {
+    .hide-small { display: none; }
+    .bar-wrap { width: 50px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Velmora help assistant</h1>
+
+  <form id="form">
+    <input id="question" type="text" maxlength="500" autocomplete="off"
+           placeholder="Ask a question, e.g. How long does standard delivery take?" required>
+    <button id="send" type="submit">Ask</button>
+  </form>
+
+  <div class="examples" id="examples">
+    <button type="button">How long does standard delivery take?</button>
+    <button type="button">How much does Express delivery cost?</button>
+    <button type="button">How long is a gift card valid?</button>
+    <button type="button">Do you have a shop in Lyon?</button>
+  </div>
+
+  <div id="output"></div>
+</main>
+
+<script>
+const form = document.getElementById("form");
+const input = document.getElementById("question");
+const send = document.getElementById("send");
+const output = document.getElementById("output");
+
+// small helper, always textContent so nothing from the answer is read as HTML
+function el(tag, attrs, children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs || {})) {
+    if (key === "text") node.textContent = value;
+    else node.setAttribute(key, value);
+  }
+  for (const child of children || []) node.appendChild(child);
+  return node;
+}
+
+function answerCard(data) {
+  const badges = [el("span", {
+    class: data.refused ? "badge no" : "badge ok",
+    text: data.refused ? "I don't know" : "Answered",
+  })];
+  if (data.conflict) badges.push(el("span", {class: "badge warn", text: "Articles disagree"}));
+
+  const cited = data.cited.length
+    ? el("p", {class: "cited"}, [el("strong", {text: "Cited: "}), ...data.cited.map(id => el("code", {text: id}))])
+    : el("p", {class: "cited", text: "Cited: none"});
+
+  const parts = [
+    el("h2", {text: "Answer"}),
+    el("div", {}, badges),
+    el("p", {class: "answer", text: data.answer}),
+    cited,
+    el("p", {class: "reason", text: data.reason}),
+  ];
+  if (data.searched_as) {
+    parts.push(el("p", {class: "reason", text: "Searched as: " + data.searched_as}));
+  }
+  return el("section", {class: "card"}, parts);
+}
+
+function rankingCard(data) {
+  if (!data.ranking.length) {
+    return el("section", {class: "card"}, [
+      el("h2", {text: "Retrieval"}),
+      el("p", {class: "reason", text: "No article shares a word with the question."}),
+    ]);
+  }
+  const top = data.ranking[0].score || 1;
+  const rows = data.ranking.map((r, i) => el("tr", {class: r.cited ? "is-cited" : ""}, [
+    el("td", {class: "num", text: String(i + 1)}),
+    el("td", {}, [el("code", {text: r.id})]),
+    el("td", {text: r.title}),
+    el("td", {class: "hide-small num", text: r.updated}),
+    el("td", {class: "num", text: r.score.toFixed(3)}),
+    el("td", {}, [el("div", {class: "bar-wrap"}, [
+      el("div", {class: "bar", style: `width:${Math.round(100 * r.score / top)}%`}),
+    ])]),
+  ]));
+  return el("section", {class: "card"}, [
+    el("h2", {text: "Retrieval: ranked articles (TF-IDF + cosine)"}),
+    el("table", {}, [
+      el("thead", {}, [el("tr", {}, ["#", "Id", "Title", "Updated", "Score", ""].map((h, i) =>
+        el("th", {class: i === 3 ? "hide-small" : "", text: h})))]),
+      el("tbody", {}, rows),
+    ]),
+    el("p", {class: "note", text: `Best score ${data.top_score}, coverage ${Math.round(100 * data.coverage)}%. Green rows are the cited articles.`}),
+  ]);
+}
+
+async function ask(question) {
+  send.disabled = true;
+  output.replaceChildren(el("p", {class: "reason", text: "Searching..."}));
+  try {
+    const res = await fetch("/ask", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({question}),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    output.replaceChildren(answerCard(data), rankingCard(data));
+  } catch (err) {
+    output.replaceChildren(el("p", {class: "error", text: "Something went wrong: " + err.message}));
+  } finally {
+    send.disabled = false;
+  }
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  if (input.value.trim()) ask(input.value);
+});
+
+document.getElementById("examples").addEventListener("click", e => {
+  if (e.target.tagName !== "BUTTON") return;
+  input.value = e.target.textContent;
+  ask(input.value);
+});
+</script>
+</body>
+</html>

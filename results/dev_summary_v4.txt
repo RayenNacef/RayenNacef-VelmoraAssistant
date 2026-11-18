@@ -1,0 +1,22 @@
+Questions: 20 (12 answerable, 8 unanswerable)
+
+Retrieval (answerable questions)
+recall@1: 0.917
+recall@3: 1.000
+recall@5: 1.000
+==========
+Answerable questions (keyword judge, see README for its limits)
+correct answers: 8/12  (66.7%)
+wrong answers:   3/12  (answered, keywords missing)
+false refusals:  1/12  (said "I don't know")
+==========
+Unanswerable questions
+correct refusals: 7/8
+answered anyway: 1/8
+==========
+Citations (the 11 answered answerable questions)
+cites at least one gold article: 10/11
+cites only gold articles: 10/11
+cites every gold article: 10/11
+
+Per-question results written to results/dev_results.jsonl

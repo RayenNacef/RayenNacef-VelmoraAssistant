@@ -1,0 +1,20 @@
+{"id": "D01", "question": "What is the minimum length of a password?", "answerable": true, "expected_answer": "At least 10 characters.", "answer_keywords": ["10 characters"], "source_articles": ["KB-20"]}
+{"id": "D02", "question": "How long does pickup point delivery take?", "answerable": true, "expected_answer": "2 to 4 working days.", "answer_keywords": ["2 to 4 working days"], "source_articles": ["KB-06"]}
+{"id": "D03", "question": "Can I buy a gift card with another gift card?", "answerable": true, "expected_answer": "No.", "answer_keywords": ["cannot be used to buy another gift card"], "source_articles": ["KB-05"]}
+{"id": "D04", "question": "How long is my basket kept after a declined payment?", "answerable": true, "expected_answer": "7 days.", "answer_keywords": ["7 days"], "source_articles": ["KB-03"]}
+{"id": "D05", "question": "Do I earn Miles when I buy a gift card?", "answerable": true, "expected_answer": "No, gift card purchases do not earn Miles.", "answer_keywords": ["do not earn miles"], "source_articles": ["KB-26"]}
+{"id": "D06", "question": "When will my replacement lock key arrive?", "answerable": true, "expected_answer": "Within 10 working days.", "answer_keywords": ["10 working days"], "source_articles": ["KB-25"]}
+{"id": "D07", "question": "When is a pre-order charged?", "answerable": true, "expected_answer": "When the item ships, within 21 days.", "answer_keywords": ["charged when the item ships"], "source_articles": ["KB-29"]}
+{"id": "D08", "question": "Are my invoices kept if I delete my account?", "answerable": true, "expected_answer": "Yes, for 10 years, by law.", "answer_keywords": ["10 years"], "source_articles": ["KB-21"]}
+{"id": "D09", "question": "Can you ship an e-bike battery to Belgium?", "answerable": true, "expected_answer": "No, batteries ship inside France only.", "answer_keywords": ["inside france only"], "source_articles": ["KB-24"]}
+{"id": "D10", "question": "How long is the legal guarantee on products?", "answerable": true, "expected_answer": "2 years.", "answer_keywords": ["2-year"], "source_articles": ["KB-17"]}
+{"id": "D11", "question": "How quickly does support reply to emails?", "answerable": true, "expected_answer": "Within 24 hours on working days.", "answer_keywords": ["24 hours"], "source_articles": ["KB-27"]}
+{"id": "D12", "question": "What do I need to collect a parcel at a pickup point?", "answerable": true, "expected_answer": "An ID and the order number.", "answer_keywords": ["id", "order number"], "source_articles": ["KB-10"]}
+{"id": "D13", "question": "Do you sell bike tyres?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D14", "question": "Do you offer a bike repair service?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D15", "question": "Is there a Velmora mobile app?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D16", "question": "How do I write a review for a product?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D17", "question": "Can I pay for my order in instalments?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D18", "question": "Is there a maximum weight for a parcel sent to a pickup point?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D19", "question": "How do I recycle an old e-bike battery?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}
+{"id": "D20", "question": "How heavy is your strongest bike lock?", "answerable": false, "expected_answer": null, "answer_keywords": null, "source_articles": []}

@@ -1,0 +1,22 @@
+Questions: 40 (35 answerable, 5 unanswerable)
+
+Retrieval (answerable questions)
+  recall@1: 0.771
+  recall@3: 0.886
+  recall@5: 0.900
+
+Answerable questions (keyword judge, see README for its limits)
+  correct answers:   23/35  (65.7%)
+  wrong answers:      3/35  (answered, keywords missing)
+  false refusals:     9/35  (said "I don't know")
+
+Unanswerable questions
+  correct refusals:   5/5
+  answered anyway:    0/5
+
+Citations (the 26 answered answerable questions)
+  cites at least one gold article: 26/26
+  cites only gold articles:        24/26
+  cites every gold article:        25/26
+
+Per-question results written to results/eval_results.jsonl

@@ -1,0 +1,17 @@
+Questions: 20 (12 answerable, 8 unanswerable)
+
+Retrieval (answerable questions)
+  recall@1: 0.917
+  recall@3: 1.000
+  recall@5: 1.000
+
+Answers (answerable questions)
+  correct (keyword judge): 8/12 = 66.7%
+  correct and citing a gold article: 8/12
+  refused by mistake: 2/12
+
+Refusals (unanswerable questions)
+  correctly refused: 7/8
+  answered anyway: 1/8
+
+Per-question results written to results/dev_results_v2.jsonl

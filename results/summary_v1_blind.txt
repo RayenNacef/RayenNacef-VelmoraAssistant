@@ -1,0 +1,17 @@
+Questions: 40 (35 answerable, 5 unanswerable)
+
+Retrieval (answerable questions)
+  recall@1: 0.771
+  recall@3: 0.886
+  recall@5: 0.900
+
+Answers (answerable questions)
+  correct (keyword judge): 22/35 = 62.9%
+  correct and citing a gold article: 22/35
+  refused by mistake: 9/35
+
+Refusals (unanswerable questions)
+  correctly refused: 5/5
+  answered anyway: 0/5
+
+Per-question results written to results/eval_results_v1_blind.jsonl
